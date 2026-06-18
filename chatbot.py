@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import time
-import json
 import traceback
 
 class XenForoChatBot:
@@ -54,6 +53,9 @@ class XenForoChatBot:
         print('>>>', message_id, user, text)
 
         text = text.strip()
+
+        if not text:
+            return
 
         if text[0] == '!':
             text = text[1:]

@@ -82,7 +82,11 @@ class XenForoClient:
             "_xfToken": self.xf_token
         }
 
-        self.session.post(self.config.urls.chat_submit_url, data)
+        for i in range(0, 10):
+            try:
+                self.session.post(self.config.urls.chat_submit_url, data)
+            except:
+                time.sleep(0.1)
 
     def get_messages(self, last_id):
         t = int(time.time())
