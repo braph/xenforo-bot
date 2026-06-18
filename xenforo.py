@@ -58,33 +58,29 @@ class XenForoClient:
         self.xf_token = self._extract_xftoken(r.text)
 
         r = self.session.post(self.config.urls.login_url, {
-            '_xfToken': self.xf_token,
-            'login': self.config.email,
-            'password': self.config.password,
-            'remember': 1
+            '_xfToken':         self.xf_token,
+            'login':            self.config.email,
+            'password':         self.config.password,
+            'remember':         1
         })
+
         self.xf_token = self._extract_xftoken(r.text)
 
     def send_message(self, message_html):
         data = {
-            "users": { "1": [ 2498, 2180, "1968", "2762", "2299", "1441" ] },
-            "channel": "room",
-            "room_id": "1",
-            "last_id": { "1": 94762 },
-            "conv_id": 0,
-            "conv_items": "",
-            "conv_unread": [],
-            "conv_last_id": 0,
-            "message_html": message_html,
-            "_xfResponseType": "json",
-            "_xfWithData": 1,
-            "_xfRequestUri": "/psychose/chat/",
-            "_xfToken": self.xf_token
+            "channel":          "room",
+            "room_id":          "1",
+            "message_html":     message_html,
+            "_xfResponseType":  "json",
+            "_xfWithData":      1,
+            "_xfRequestUri":    "/psychose/chat/",
+            "_xfToken":         self.xf_token
         }
 
         for i in range(0, 10):
             try:
                 self.session.post(self.config.urls.chat_submit_url, data)
+                return
             except:
                 time.sleep(0.1)
 
@@ -92,23 +88,12 @@ class XenForoClient:
         t = int(time.time())
 
         data = {
-            #"users": {"1": [1441,2498,2180,2299]},
-            "channel":"room",
-            "room_id":"1",
-            "last_id": {"1":last_id},
-            "conv_id":0,
-            "conv_unread":[],
-            "conv_only":0,
-            "conv_items":"",
-            "conv_last_active":t,
-            "conv_last_update":t,
-            "user_last_update":t,
-            "is_chat_page":1,
-            "hide_tabs":0,
-            "_xfResponseType":"json",
-            "_xfWithData":1,
-            "_xfRequestUri":"/psychose/chat/",
-            "_xfToken": self.xf_token
+            "channel":          "room",
+            "room_id":          "1",
+            "_xfResponseType":  "json",
+            "_xfWithData":      1,
+            "_xfRequestUri":    "/psychose/chat/",
+            "_xfToken":         self.xf_token
         }
 
         r = self.session.post(self.config.urls.chat_update_url, data)
@@ -123,7 +108,7 @@ class XenForoClient:
         doc = html.fromstring(messages_html)
 
         for li in doc.cssselect('.siropuChatMessageRow'):
-            left = li.cssselect('.siropuChatMessageContentLeft')
+            #left = li.cssselect('.siropuChatMessageContentLeft')
             user = li.cssselect('.username')[0].text
             text = li.cssselect('.siropuChatMessageText')[0].text_content()
             data_id = int(li.attrib['data-id'])
